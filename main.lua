@@ -9,7 +9,7 @@ function love.load()
     cells[i] = {}
 
       cells[i].state = false
-      cells[i].letter = " " -- starts each cell with blank spot
+      cells[i].letter = "test" -- starts each cell with blank spot
 
       cells[i].x = (70 * i) + 25
       cells[i].y = 100
@@ -22,48 +22,40 @@ function love.load()
       cells[i].a = 0.7
 
       cells[i].cellColorState = "line"
-
-    text = " "
   end
 end
 
 function love.update(dt)
-  if cells[current].state == true and current <= #cells then -- updates the "if pressed" state of the current cell once "space" is pressed
-
-    function love.textinput(t)
-      cells[current].letter = t
-    end
-
-    cells[current].a = 1
-    current = current + 1
-  end
-
-  -- print(current)
+  -- if cells[current].state == true and current <= 5 then
+  --
+  --   -- function love.textinput(text)
+  --   --   print(text)
+  --   --   cells[current].letter = text
+  --   -- end
+  --
+  -- end
 end
-
-local utf8 = require("utf8")
 
 
 function love.draw()
 
   g.setBackgroundColor(0, 0, 0, 1)
-  g.printf(text, cells[current].x + 10, cells[current].y + 15, love.graphics.getWidth())
+  -- g.printf(text, cells[current].x + 10, cells[current].y + 15, love.graphics.getWidth())
 
   for i = 1, 5 do
     g.setColor(cells[i].r, cells[i].g, cells[i].b, cells[i].a)
     g.rectangle(cells[i].cellColorState, cells[i].x, cells[i].y, cells[i].w, cells[i].h)
-    g.print(cells[i].letter, cells[i].x + 10, cells[i].y + 15, 0, 2.5, 2.5)
+    g.print(cells[i].letter, cells[i].x + 10, cells[i].y + 15, 0, 1, 1)
   end
 end
 
 function love.keypressed(key)
   if key == "escape" then
     love.event.quit(0)
-  end
-
-  if key ~= "escape" then
+  else
     cells[current].state = true
-    print(cells[current].state)
-    --print(current)
+    cells[current].letter = key
+    cells[current].a = 1
+    current = current + 1
   end
 end
