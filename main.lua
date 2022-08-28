@@ -1,11 +1,11 @@
 g = love.graphics
 
 function love.load()
-  Current = 1
+  current = 1
 
   Cells = {} -- generates 1 row of Cells (for now...)
 
-  for i = 1, 6 do -- added extra key to avoid program crashing when it thinks it's run out
+  for i = 1, 6 do -- added extra key to avoid program crashing when it thinks it's run out of cells
     Cells[i] = {}
 
       Cells[i].state = false
