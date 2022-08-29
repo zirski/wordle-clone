@@ -6,6 +6,7 @@ function love.load()
 
   Font = love.graphics.newFont("coolvetica_rg.ttf", 40)
   current = 1
+  Validate = false
 
   Cells = {} -- generates 1 row of Cells (for now...)
   Letters = {}  -- array for entered letters
@@ -16,10 +17,10 @@ function love.load()
   end
 
 
-  for i = 1, 6 do -- added extra key to avoid program crashing when it thinks it's run out of cells
+  for i = 1, 5 do
     Cells[i] = {}
 
-    Cells[i].state = false
+    -- Cells[i].state = false
     Cells[i].letter = " " -- starts each cell with blank spot
 
     Cells[i].x = (70 * i) + 25
@@ -31,6 +32,8 @@ function love.load()
     Cells[i].b = 255 / 255
     Cells[i].a = 0.7
 
+    Cells[i].matched = nil
+
     Cells[i].cellColorState = "line"
 
   end
@@ -38,9 +41,24 @@ end
 
 
 function love.update(dt)
-
+  if #Letters == #SplitWord then
+    if Validate == true then
+      for i, v in ipairs(SplitWord) do
+        Cells[i].matched = (Cells[i].letter == v)
+      end
   
+      for i = 1, 5 do
+        if Cells[i].matched then
+          Cells[i].cellColorState = "fill"
+          Cells[i].a = 0.6
+        end
+      end
+    end
 
+    Validate = false
+  end
+
+  print(Validate)
 end
 
 
@@ -52,25 +70,34 @@ function love.draw()
   for i = 1, 5 do
     g.setColor(Cells[i].r, Cells[i].g, Cells[i].b, Cells[i].a)
     g.rectangle(Cells[i].cellColorState, Cells[i].x, Cells[i].y, Cells[i].w, Cells[i].h)
-    g.print(Cells[i].letter, Font, Cells[i].x + 12.5, Cells[i].y + 2.5, 0)
+    g.print(Cells[i].letter, Font, Cells[i].x + 12.5, Cells[i].y + 2, 0)
   end
 end
 
 function love.keypressed(key)
   if key == "escape" then
+    for i = 1, #Cells do
+      print(Cells[i].matched)
+    end
     love.event.quit(0)
+  elseif key == "backspace" and current > 0 then -- adds functionality to delete characters doesn't work yet)
+    Cells[current].matched = nil
+    Cells[current].letter = " "
+    Cells[current].a = 0.7
+    
+    current = current - 1
+  elseif key == "return" then
+    Validate = true
+
   elseif current <= 5 then
     
     Cells[current].letter = key
     -- stores all letter entries into an array
     table.insert(Letters, Cells[current].letter)
     
+
     Cells[current].a = 1
     current = current + 1
-
-    for i = 1, 5 do
-      print(SplitWord[i])
-    end
   end
 end
 
